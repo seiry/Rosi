@@ -21,22 +21,22 @@ import java.util.regex.Pattern;
 /**
  * Created by qtfreet00 on 2016/11/1.
  */
-public class PaChong {
+public class DisiPachong {
     public static void main(String[] args) throws IOException {
-        Document pages = Application.get("http://www.rosi365.com/rosi/rosi");
+        Document pages = Application.get("http://www.disi8.com/disimulu/disi");
         Element first = pages.getElementsByClass("last").first();
         String getPage = first.attr("href");
-        int count = Integer.valueOf(getPage.replace("http://www.rosi365.com/rosi/rosi/page/", ""));
+        int count = Integer.valueOf(getPage.replace("http://www.disi8.com/disimulu/disi/page/", ""));
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd H:m:s");
         Date date = new Date();
         Pattern p = Pattern.compile("[a-zA-z]+://[^\\s]*");
         RosiBean rosibean = new RosiBean();
-        rosibean.setName("rosi套图");
+        rosibean.setName("第四印象");
         rosibean.setTime(format.format(date));
         List<RosiBean.DataBean> list = new ArrayList<>();
         for (int i = 1; i < count + 1; i++) {
             System.out.println("第" + i + "轮开始");
-            Document document = Application.get("http://www.rosi365.com/rosi/rosi/page/" + i);
+            Document document = Application.get("http://www.disi8.com/disimulu/disi/page/" + i);
             Elements select = document.select("div#loop");
             Elements postimg = select.select("div.postimg");
             for (Element e : postimg) {
@@ -55,40 +55,13 @@ public class PaChong {
                         if (index != -1) {
                             data.setDownload(urls.substring(index));
                         } else {
-                            data.setDownload("null");
-                        }
-                    } else if (title.startsWith("VN")) {
-                        data.setType("1");
-                        data.setDownload(imgs.select("div.part").select("a").last().attr("href"));
-                    } else if (title.startsWith("QINGQU")) {
-                        data.setType("2");
-                        String urls = imgs.select("div#forumcode").html().replace("[/img]", "").replace("[img]", ",").replace(postUrl, "").trim();
-                        int index = urls.indexOf("http");
-                        if (index != -1) {
-                            data.setDownload(urls.substring(index));
-                        } else {
-                            data.setDownload("null");
-                        }
-                    } else if (title.startsWith("QQN")) {
-                        data.setType("3");
-                        String urls = imgs.select("div#forumcode").html().replace("[/img]", "").replace("[img]", ",").replace(postUrl, "").trim();
-                        int index = urls.indexOf("http");
-                        if (index != -1) {
-                            data.setDownload(urls.substring(index));
-                        } else {
-                            data.setDownload("null");
-                        }
-                    } else if (title.startsWith("201")) {
-                        data.setType("4");
-                        String urls = imgs.select("div#forumcode").html().replace("[/img]", "").replace("[img]", ",").replace(postUrl, "").trim();
-                        int index = urls.indexOf("http");
-                        if (index != -1) {
-                            data.setDownload(urls.substring(index));
-                        } else {
+                            //data.setDownload("null");
+                            System.out.println(title);
+                            System.out.println(postUrl);
+                            System.out.println("这里有错误");
                             data.setDownload("null");
                         }
                     } else {
-                        System.out.println(url);
                         System.out.println(title);
                     }
                     data.setPostimg(postImg);
@@ -102,9 +75,10 @@ public class PaChong {
         }
         rosibean.setData(list);
         String s = JSON.toJSONString(rosibean, true);
-        File f = new File("D:/2222.txt");
+        File f = new File("D:/disi.txt");
         BufferedWriter bw = new BufferedWriter(new FileWriter(f));
         bw.write(s);
         bw.close();
     }
+
 }
